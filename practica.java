@@ -119,7 +119,13 @@ public class practica {
                 }
             }
 
+            // 1. Generamos la matriz del tablero
+            String[][] matriz = new String[2*filas + 1][2 * columnas + 1];
 
+            // 2. Generamos y asignamos la estructura del tablero
+            matriz = genera_tablero(matriz, filas, columnas);
+            
+            render_matriz(matriz);
 
             // Comprobamos que la entrada sea valida ()
         }else if(opcion_menu == 2){
@@ -160,12 +166,26 @@ public class practica {
     // Generador del tablero
     // Entrada: 2 Variables (Filas [1, 5], columnas [1, 5])
     // Salida: Matriz de 2n+1 Filas x 2n+1 columnas
-    public static void generador_tablero(int filas, int columnas){
-        // 1. Creamos la matriz del tablero
-        String[][] matriz = new String[2*filas + 1][2 * columnas + 1];
-
+    public static String[][] genera_tablero(String[][] matriz, int filas, int columnas){
         // 2. Asignamos valores a las posiciones jugables
-        
+        // Recorremos las filas de la matriz y las columnas
+        for(int fil = 0; fil < filas; fil++){
+            for(int col = 0; col < columnas; col++){
+                
+            }
+        }
+        return matriz;
+    }
+
+
+    // Funcion para mostrar el tablero
+    public static void render_matriz(String[][] matriz) {
+        for (int i = 0; i < matriz.length; i++) { // Recorrer filas
+            for (int j = 0; j < matriz[i].length; j++) { // Recorrer columnas
+                System.out.print(matriz[i][j] + " "); // Imprimir elemento
+            }
+            System.out.println(); // Nueva línea después de cada fila
+        }
     }
 
     
