@@ -88,11 +88,11 @@ public class practica {
             
             boolean dimensiones_validas = false;
             while(!dimensiones_validas){
-                System.out.print("");
-                System.out.println("Dimensiones no validas...");
-                System.out.print("");
                 // Si las filas no son validas, muestro el error por pantalla y las vuelvo a pedir
                 if (filas < 1 || filas > 5){
+                    System.out.print("");
+                    System.out.println("Dimensiones no validas...");
+                    System.out.print("");
                     System.out.println("El numero de filas debe ser entre 1 y 5");
                     System.out.print("Inserte las filas deseadas de nuevo: ");
                     filas = sc.nextInt();
@@ -101,6 +101,9 @@ public class practica {
                 }
                 // Si las columnas no son validas, muestro el error por pantalla y las vuelvo
                 else if (columnas < 1 || columnas > 5){
+                    System.out.print("");
+                    System.out.println("Dimensiones no validas...");
+                    System.out.print("");
                     System.out.println("El numero de columnas debe ser entre 1 y 5");
                     System.out.print("Inserte las columnas deseadas de nuevo: ");
                     columnas = sc.nextInt();
@@ -110,6 +113,8 @@ public class practica {
                 
                 // Las dimensiones son validas, salimos del bucle para continuar con el juego
                 if(filas >= 1 && filas <= 5 && columnas >= 1 && columnas <= 5){
+                    System.out.println("Las dimensiones insertadas son validas...");
+                    System.out.println("Generando tablero para la partida...");
                     dimensiones_validas = true;
                 }
             }
@@ -149,6 +154,18 @@ public class practica {
         System.out.println("│ 3. Ver Resultados           │");
         System.out.println("│ 4. Salir                    │");
         System.out.println("└─────────────────────────────┘");
+    }
+
+
+    // Generador del tablero
+    // Entrada: 2 Variables (Filas [1, 5], columnas [1, 5])
+    // Salida: Matriz de 2n+1 Filas x 2n+1 columnas
+    public static void generador_tablero(int filas, int columnas){
+        // 1. Creamos la matriz del tablero
+        String[][] matriz = new String[2*filas + 1][2 * columnas + 1];
+
+        // 2. Asignamos valores a las posiciones jugables
+        
     }
 
     
