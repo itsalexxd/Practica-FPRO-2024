@@ -119,14 +119,45 @@ public class practica {
                 }
             }
 
+            System.out.println("");
+
+            // Pregunto el nombre de los jugadores
+            System.out.print("Inserte el nombre del Jugador 1: ");
+            String jugador_1 = sc.nextLine();
+
+            System.out.println("");
+
+            System.out.print("Inserte el nombre del Jugador 2: ");
+            String jugador_2 = sc.nextLine();
+            
+            System.out.println("");
 
             // 1. Generamos la matriz del tablero
             char[][] matriz = new char[2*filas + 1][2 * columnas + 1];
-
             // 2. Generamos y asignamos la estructura del tablero
             matriz = genera_tablero(matriz, filas, columnas);
-            
-            render_matriz(matriz);
+
+            String jugada;
+
+            // Creamos el bucle del juego
+            boolean loop_game = false;
+            while(!loop_game){
+                // Mostramos el mensaje para notificar en caso de querer parar la partida
+                System.out.println("Introduzca [ ** ] en caso de querer guardar la partida y salir.");
+
+                System.out.println("");
+
+                // Mostramos el tablero en pantalla
+                render_matriz(matriz);
+
+                System.out.println("");
+                System.out.println("");
+
+                // Turno jugador 1
+                System.out.println("[J1] " + jugador_1 + " su turno: ");
+                jugada = sc.nextLine();
+
+            }
 
             // Comprobamos que la entrada sea valida ()
         }else if(opcion_menu == 2){
@@ -137,6 +168,17 @@ public class practica {
         // Ciouto el objeto scanner
         sc.close();
     }
+
+
+
+
+
+
+
+
+
+
+
     /////////////
     // METODOS //
     /////////////
