@@ -119,8 +119,9 @@ public class practica {
                 }
             }
 
+
             // 1. Generamos la matriz del tablero
-            String[][] matriz = new String[2*filas + 1][2 * columnas + 1];
+            char[][] matriz = new char[2*filas + 1][2 * columnas + 1];
 
             // 2. Generamos y asignamos la estructura del tablero
             matriz = genera_tablero(matriz, filas, columnas);
@@ -131,7 +132,6 @@ public class practica {
         }else if(opcion_menu == 2){
 
         }
-
 
 
         // Ciouto el objeto scanner
@@ -166,12 +166,43 @@ public class practica {
     // Generador del tablero
     // Entrada: 2 Variables (Filas [1, 5], columnas [1, 5])
     // Salida: Matriz de 2n+1 Filas x 2n+1 columnas
-    public static String[][] genera_tablero(String[][] matriz, int filas, int columnas){
-        // 2. Asignamos valores a las posiciones jugables
+    public static char[][] genera_tablero(char[][] matriz, int filas, int columnas){
+        // Corrigo el valor de las filas y las columnas en base de la funcion 2n + 1
+        int row = 2 * filas + 1;
+        int colum = 2 * columnas + 1;
+
+        // Creo la variable para asignar las letras
+        char letra_mayusc = 'A';
+        char letra_min = 'a';
+        char nums = '0';
+
+
         // Recorremos las filas de la matriz y las columnas
-        for(int fil = 0; fil < filas; fil++){
-            for(int col = 0; col < columnas; col++){
+        for(int fil = 0; fil < row; fil++){
+            for(int col = 0; col < colum; col++){
+                // Asigno a cada posicion de la matriz, el valor correspondiente
+                // En las filas y columnas pares asignamos el "■"
+                if(fil % 2 == 0 && col % 2 == 0){
+                    matriz[fil][col] = '•';
                 
+                // En las que no son pares, el valor para cada jugada [A,Z], [a, z], [0, 9] 
+                }else if(fil % 2 != 0 && col % 2 != 0){
+                    matriz[fil][col] = 'x';
+
+                }else{
+                    if (letra_mayusc <= 'Z'){
+                        matriz[fil][col] = letra_mayusc;
+                        letra_mayusc++;
+                    
+                    // Si todas las mayusculas se han usado, pasamos a usar las minusculas
+                    }else if(letra_min <= 'z'){
+                        matriz[fil][col] = letra_min;
+                        letra_min++;
+                    }else if(nums <= '9'){
+                        matriz[fil][col] = nums;
+                        nums++;
+                    }
+                }
             }
         }
         return matriz;
@@ -179,7 +210,7 @@ public class practica {
 
 
     // Funcion para mostrar el tablero
-    public static void render_matriz(String[][] matriz) {
+    public static void render_matriz(char[][] matriz) {
         for (int i = 0; i < matriz.length; i++) { // Recorrer filas
             for (int j = 0; j < matriz[i].length; j++) { // Recorrer columnas
                 System.out.print(matriz[i][j] + " "); // Imprimir elemento
