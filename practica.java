@@ -123,12 +123,12 @@ public class practica {
 
             // Pregunto el nombre de los jugadores
             System.out.print("Inserte el nombre del Jugador 1: ");
-            String jugador_1 = sc.nextLine();
+            String jugador_1 = sc.next();
 
             System.out.println("");
 
             System.out.print("Inserte el nombre del Jugador 2: ");
-            String jugador_2 = sc.nextLine();
+            String jugador_2 = sc.next();
             
             System.out.println("");
 
@@ -144,8 +144,8 @@ public class practica {
             while(!loop_game){
                 // Mostramos el mensaje para notificar en caso de querer parar la partida
                 System.out.println("┌─────────────────────────────────────────────────────────────────┐");
-                System.out.println("Introduzca [ ** ] en caso de querer guardar la partida y salir.");
-                ystem.out.println("└─────────────────────────────┘");
+                System.out.println("│ Introduzca [ ** ] en caso de querer guardar la partida y salir. │");
+                System.out.println("└─────────────────────────────────────────────────────────────────┘");
 
                 System.out.println("");
 
@@ -157,14 +157,34 @@ public class practica {
 
                 // Turno jugador 1
                 System.out.print("[J1] " + jugador_1 + " su turno: ");
-                jugada = sc.nextLine();
+                jugada = sc.next();
+
+                // Validamos que la entrada sea valida
+                while(!valida_entrada(jugada)){
+                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                    jugada = sc.next();
+                }
+
+                // Ahora ejecutamos la jugada
+
 
 
                 // Turno jugador 2
                 System.out.print("[J2] " + jugador_2 + " su turno: ");
-                jugada = sc.nextLine();
+                jugada = sc.next();
 
             }
+
+
+
+
+
+
+
+
+
+
+
 
             // Comprobamos que la entrada sea valida ()
         }else if(opcion_menu == 2){
@@ -269,8 +289,25 @@ public class practica {
     }
 
     
-    
+    // Funcion para validar la entrada de las jugadas
+    // Entrada --> Char (por teclado)
+    // Salida --> boolean
+    public static boolean valida_entrada (char jugada){
+        // Tenemos que comprobar que la jugada este disponible
 
+        
+        return true;
+    }
+
+
+    // Funcion que realiza las jugadas en la matriz
+    // Entrada --> char jugada
+    // Salida --> char[][] matriz
+    public static char[][] realiza_jugada(char[][] matriz, char jugada){
+        
+        
+        return matriz;
+    }
 
 
 }
