@@ -160,7 +160,8 @@ public class practica {
                 jugada = sc.next();
 
                 // Validamos que la entrada sea valida
-                while(!valida_entrada(jugada)){
+                boolean entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                while(!entrada_valida){
                     System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
                     jugada = sc.next();
                 }
@@ -290,13 +291,29 @@ public class practica {
 
     
     // Funcion para validar la entrada de las jugadas
-    // Entrada --> Char (por teclado)
+    // Entrada --> Char (por teclado), Char[][] matriz, int filas, int columnas
     // Salida --> boolean
-    public static boolean valida_entrada (char jugada){
+    public static boolean valida_entrada (String jugada, char[][] matriz, int filas, int columnas){
+        // Creamos una variable para devolver el resultado y otra para la comprobacion de la comprobacion
+        boolean resultado = false;
+        boolean comprobacion = false;
         // Tenemos que comprobar que la jugada este disponible
-
+            // Recorro el array en busca de la jugada insertada
+            // En caso de que la jugada no se encuentre, sera una entraa no valida
+        for(int col = 0; col < columnas; col++){
+            for(int fil = 0; col < filas; fil++){
+                if(!comprobacion){
+                    if(matriz[fil][col] == jugada){
+                        resultado = true;
+                        comprobacion = true;
+                    }else{
+                        resultado = false;
+                    }
+                }
+            }
+        }
         
-        return true;
+        return resultado;
     }
 
 
