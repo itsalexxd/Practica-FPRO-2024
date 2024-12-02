@@ -143,7 +143,9 @@ public class practica {
             boolean loop_game = false;
             while(!loop_game){
                 // Mostramos el mensaje para notificar en caso de querer parar la partida
+                System.out.println("┌─────────────────────────────────────────────────────────────────┐");
                 System.out.println("Introduzca [ ** ] en caso de querer guardar la partida y salir.");
+                ystem.out.println("└─────────────────────────────┘");
 
                 System.out.println("");
 
@@ -154,7 +156,12 @@ public class practica {
                 System.out.println("");
 
                 // Turno jugador 1
-                System.out.println("[J1] " + jugador_1 + " su turno: ");
+                System.out.print("[J1] " + jugador_1 + " su turno: ");
+                jugada = sc.nextLine();
+
+
+                // Turno jugador 2
+                System.out.print("[J2] " + jugador_2 + " su turno: ");
                 jugada = sc.nextLine();
 
             }
@@ -229,7 +236,7 @@ public class practica {
                 
                 // En las que no son pares, el valor para cada jugada [A,Z], [a, z], [0, 9] 
                 }else if(fil % 2 != 0 && col % 2 != 0){
-                    matriz[fil][col] = 'x';
+                    matriz[fil][col] = ' ';
 
                 }else{
                     if (letra_mayusc <= 'Z'){
