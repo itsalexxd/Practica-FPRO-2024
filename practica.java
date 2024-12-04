@@ -305,8 +305,8 @@ public class practica {
             // Tenemos que comprobar que la jugada este disponible en la matriz
             // Recorro el array en busca de la jugada insertada
             // En caso de que la jugada no se encuentre, sera una entraa no valida
-            for(int col = 0; col < columnas; col++){
-                for(int fil = 0; col < filas; fil++){
+            for(int fil = 0; fil < matriz.length - 1; fil++){
+                for(int col = 0; col < matriz[fil].length - 1; col++){
                     if(matriz[fil][col] == input){
                         return true;
                     }
@@ -326,8 +326,8 @@ public class practica {
         char input = jugada.charAt(0);
 
         // Recorro la matriz para encontrar la posicion indicada para la jugada
-        for(int col = 0; col < columnas; col++){
-            for(int fil = 0; fil < filas; fil++){
+        for(int col = 0; col < matriz[0].length; col++){
+            for(int fil = 0; fil < matriz.length; fil++){
                 // Comprobamos si la jugada tiene que ser vertical u horizontal
                 // Vertical
                 if(col % 2 == 0 && matriz[fil][col] == input){
