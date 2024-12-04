@@ -293,35 +293,58 @@ public class practica {
     // Funcion para validar la entrada de las jugadas
     // Entrada --> Char (por teclado), Char[][] matriz, int filas, int columnas
     // Salida --> boolean
-    public static boolean valida_entrada (String jugada, char[][] matriz, int filas, int columnas){
+    public static boolean valida_entrada (Sring jugada, char[][] matriz, int filas, int columnas){
         // Creamos una variable para devolver el resultado y otra para la comprobacion de la comprobacion
         boolean resultado = false;
         boolean comprobacion = false;
-        // Tenemos que comprobar que la jugada este disponible
+
+        // Convierto la jugada de string a char para poder compararla con las posibilidades de la matriz
+        char input = jugada.charAt(0);
+
+        // En caso de que la jugada sea "**" devolvemos true automaticamente
+        if(jugada == "**"){
+            return true;
+        }
+
+        // Compruebo que la longitud de la cadena sea valida
+        if(jugada.length != 1){
+            return false;
+
+        }else{
+            // Tenemos que comprobar que la jugada este disponible en la matriz
             // Recorro el array en busca de la jugada insertada
             // En caso de que la jugada no se encuentre, sera una entraa no valida
-        for(int col = 0; col < columnas; col++){
-            for(int fil = 0; col < filas; fil++){
-                if(!comprobacion){
-                    if(matriz[fil][col] == jugada){
-                        resultado = true;
-                        comprobacion = true;
-                    }else{
-                        resultado = false;
+            for(int col = 0; col < columnas; col++){
+                for(int fil = 0; col < filas; fil++){
+                    if(matriz[fil][col] == input){
+                        return true;
                     }
                 }
             }
         }
-        
-        return resultado;
-    }
 
 
     // Funcion que realiza las jugadas en la matriz
     // Entrada --> char jugada
     // Salida --> char[][] matriz
-    public static char[][] realiza_jugada(char[][] matriz, char jugada){
-        
+    public static char[][] realiza_jugada(char[][] matriz, String jugada, int filas, int columnas){
+        // Cambio de string a char la jugada
+        char input = jugada.charAt(0);
+
+        // Recorro la matriz para encontrar la posicion indicada para la jugada
+        for(int col = 0; col < columnas; col++){
+            for(int fil = 0; fil < filas; fil++){
+                // Comprobamos si la jugada tiene que ser vertical u horizontal
+                // Vertical
+                if(col % 2 == 0 && matriz[fil][col] == input){
+                    matriz[fil][col] = '│';
+
+                // Horizontal
+                }else if(fil % 2 == 0 && matriz[fil][col] == input){
+                    matriz[fil][col] = '─';
+                }
+            }
+        }
         
         return matriz;
     }
