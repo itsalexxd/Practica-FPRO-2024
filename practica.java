@@ -166,13 +166,25 @@ public class practica {
                     jugada = sc.next();
                 }
 
-                // Ahora ejecutamos la jugada
-
+                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                realiza_jugada(matriz, jugada, filas, columnas);
+                render_matriz(matriz);
 
 
                 // Turno jugador 2
                 System.out.print("[J2] " + jugador_2 + " su turno: ");
                 jugada = sc.next();
+
+                // Validamos que la entrada sea valida
+                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                while(!entrada_valida){
+                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                    jugada = sc.next();
+                }
+
+                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                realiza_jugada(matriz, jugada, filas, columnas);
+                render_matriz(matriz);
 
             }
 
