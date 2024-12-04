@@ -293,21 +293,12 @@ public class practica {
     // Funcion para validar la entrada de las jugadas
     // Entrada --> Char (por teclado), Char[][] matriz, int filas, int columnas
     // Salida --> boolean
-    public static boolean valida_entrada (Sring jugada, char[][] matriz, int filas, int columnas){
-        // Creamos una variable para devolver el resultado y otra para la comprobacion de la comprobacion
-        boolean resultado = false;
-        boolean comprobacion = false;
-
+    public static boolean valida_entrada (String jugada, char[][] matriz, int filas, int columnas){
         // Convierto la jugada de string a char para poder compararla con las posibilidades de la matriz
         char input = jugada.charAt(0);
 
-        // En caso de que la jugada sea "**" devolvemos true automaticamente
-        if(jugada == "**"){
-            return true;
-        }
-
         // Compruebo que la longitud de la cadena sea valida
-        if(jugada.length != 1){
+        if(jugada.length() < 1 || jugada.length() > 2){
             return false;
 
         }else{
@@ -322,6 +313,9 @@ public class practica {
                 }
             }
         }
+        // En caso de que no sea valido, devolvemos false
+        return false;
+    }
 
 
     // Funcion que realiza las jugadas en la matriz
