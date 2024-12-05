@@ -16,6 +16,7 @@ Cosas por hacer:
 package Practica;
 
 import java.util.Scanner;
+import java.util.Random;
 
 
 public class practica {
@@ -150,7 +151,7 @@ public class practica {
             // 2. Generamos y asignamos la estructura del tablero
             matriz = genera_tablero(matriz, filas, columnas);
 
-            String jugada;
+            String jugada = " ";
 
             //-------------//
             // BUCLE JUEGO //
@@ -159,9 +160,9 @@ public class practica {
             boolean loop_game = false;
             while(!loop_game){
                 // Mostramos el mensaje para notificar en caso de querer parar la partida
-                System.out.println("┌─────────────────────────────────────────────────────────────────┐");
-                System.out.println("│ Introduzca [ ** ] en caso de querer guardar la partida y salir. │");
-                System.out.println("└─────────────────────────────────────────────────────────────────┘");
+                System.out.println("┌───────────────────────────────────────────────────────────────┐");
+                System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
+                System.out.println("└───────────────────────────────────────────────────────────────┘");
 
                 System.out.println("");
 
@@ -171,54 +172,54 @@ public class practica {
                 System.out.println("");
                 System.out.println("");
 
-                // Turno jugador 1
-                System.out.print("[J1] " + jugador_1 + " su turno: ");
-                jugada = sc.next();
-
-                // Validamos que la entrada sea valida
+                double probabilidad = Math.random() * 10;
                 boolean entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                while(!entrada_valida){
-                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                if((int) probabilidad <= 5 && (int) probabilidad >= 0){
+                    // Turno jugador 1
+                    System.out.print("[J1] " + jugador_1 + " su turno: ");
                     jugada = sc.next();
+
+                    // Validamos que la entrada sea valida
                     entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                }
+                    while(!entrada_valida){
+                        System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                        jugada = sc.next();
+                        entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                    }
 
-                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
-                realiza_jugada(matriz, jugada, filas, columnas);
-                render_matriz(matriz);
-
-
-                // Turno jugador 2
-                System.out.print("[J2] " + jugador_2 + " su turno: ");
-                jugada = sc.next();
-
-                // Validamos que la entrada sea valida
-                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                while(!entrada_valida){
-                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                    // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                    realiza_jugada(matriz, jugada, filas, columnas);
+                    render_matriz(matriz);
+                
+                }else{
+                     // Turno jugador 2
+                    System.out.print("[J2] " + jugador_2 + " su turno: ");
                     jugada = sc.next();
-                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                }
 
-                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
-                realiza_jugada(matriz, jugada, filas, columnas);
-                render_matriz(matriz);
+                    // Validamos que la entrada sea valida
+                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                    while(!entrada_valida){
+                        System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                        jugada = sc.next();
+                        entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                    }
+
+                    // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                    realiza_jugada(matriz, jugada, filas, columnas);
+                    render_matriz(matriz);
+                }
+                
+
+
+               
 
             }
 
 
 
-
-
-
-
-
-
-
-
-
-            // Comprobamos que la entrada sea valida ()
         }else if(opcion_menu == 2){
+
+        }else if(opcion_menu == 3){
 
         }
 
