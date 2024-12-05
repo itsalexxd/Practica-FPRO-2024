@@ -1,5 +1,18 @@
 // https://campusvirtual.uva.es/pluginfile.php/6320700/mod_resource/content/2/%5BFPRO%5D%20Enunciado%20Pr%C3%A1ctica%20v1.3.pdf
 
+
+/* 
+Cosas por hacer:
+    - Random inicio jugadores
+    - Comprobar cuadrado hecho
+    - Si Jugador completa cuadrado, vuelve a jugar
+    
+    - Caso 2
+    - Caso 3
+
+    - Optimizaciones
+    - Organizar variables
+*/ 
 package Practica;
 
 import java.util.Scanner;
@@ -139,6 +152,9 @@ public class practica {
 
             String jugada;
 
+            //-------------//
+            // BUCLE JUEGO //
+            //-------------//
             // Creamos el bucle del juego
             boolean loop_game = false;
             while(!loop_game){
@@ -356,6 +372,19 @@ public class practica {
         }
         return matriz;
     } // Fin realiza_jugada
+
+
+    // Funcion que comprueba si se ha cerrado un cuadrado
+    // Entrada: char[][] matriz, String jugada, int filas, int columnas
+    // Salida: no hay como tal
+    public static void comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas){
+        // Cambio de String a char la variable de jugada
+        char input = jugada.charAt(0);
+    
+        // En la posicion de la jugada, comprobamos las posiciones adyacentes en busca de cuadrados cerrados (siempre 2)
+
+        
+    }
 
 
 } // Fin de la clase
