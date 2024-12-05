@@ -16,7 +16,7 @@ public class practica {
         // Mostramos por pantalla el menu de inicio del juego
         imprime_menu();
         
-        System.out.print("Elije una opcion...");
+        System.out.print("Elije una opcion... ");
         int opcion_menu = sc.nextInt();
 
         // Pedimos la opcion y realizamos comprobaciones para que sea una opcion correcta
@@ -164,6 +164,7 @@ public class practica {
                 while(!entrada_valida){
                     System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
                     jugada = sc.next();
+                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
                 }
 
                 // Ahora ejecutamos la jugada y mostramos el tablero actualizado
@@ -180,6 +181,7 @@ public class practica {
                 while(!entrada_valida){
                     System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
                     jugada = sc.next();
+                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
                 }
 
                 // Ahora ejecutamos la jugada y mostramos el tablero actualizado
@@ -299,7 +301,7 @@ public class practica {
             }
             System.out.println(); // Nueva línea después de cada fila
         }
-    }
+    } // Fin render_matriz
 
     
     // Funcion para validar la entrada de las jugadas
@@ -309,25 +311,26 @@ public class practica {
         // Convierto la jugada de string a char para poder compararla con las posibilidades de la matriz
         char input = jugada.charAt(0);
 
-        // Compruebo que la longitud de la cadena sea valida
+        // Compruebo que la longitud de la cadena sea valida (minimo 1 y maximo 2 para el caso de salir y guardar)
         if(jugada.length() < 1 || jugada.length() > 2){
             return false;
+        }
 
-        }else{
-            // Tenemos que comprobar que la jugada este disponible en la matriz
-            // Recorro el array en busca de la jugada insertada
-            // En caso de que la jugada no se encuentre, sera una entraa no valida
-            for(int fil = 0; fil < matriz.length - 1; fil++){
-                for(int col = 0; col < matriz[fil].length - 1; col++){
-                    if(matriz[fil][col] == input){
-                        return true;
-                    }
+        // Compruebo el resto de casos
+        // Tenemos que comprobar que la jugada este disponible en la matriz
+        // Recorro el array en busca de la jugada insertada
+        // En caso de que la jugada no se encuentre, sera una entraa no valida
+        for(int fil = 0; fil < 2*filas+1; fil++){
+            for(int col = 0; col < 2*columnas+1; col++){
+                if(matriz[fil][col] == input){
+                    return true;
                 }
             }
         }
+
         // En caso de que no sea valido, devolvemos false
         return false;
-    }
+    } // Fin valida_entrada
 
 
     // Funcion que realiza las jugadas en la matriz
@@ -351,9 +354,8 @@ public class practica {
                 }
             }
         }
-        
         return matriz;
-    }
+    } // Fin realiza_jugada
 
 
-}
+} // Fin de la clase
