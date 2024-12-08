@@ -37,6 +37,7 @@ public class practica {
         String jugada = " ";
         int puntuacion_1 = 0;
         int puntuacion_2 = 0;
+        boolean primer_turno = false;
         
 
         // Limpio el terminal para mayor claridad visual
@@ -170,84 +171,117 @@ public class practica {
             //-------------//
             // BUCLE JUEGO //
             //-------------//
-            // Creamos el bucle del juego
+            // INICIO PRIMER TURNO
+
+            // Limpiamos la terminal
+            limpiar_terminal();
+            // Mostramos el mensaje para notificar en caso de querer parar la partida
+            System.out.println("┌───────────────────────────────────────────────────────────────┐");
+            System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
+            System.out.println("└───────────────────────────────────────────────────────────────┘");
+            // Mostramos la puntuacion que llevan ambos jugadores
+            System.out.println("┌────────────────────┐");
+            System.out.printf("│ [J1] %-10s: %d │\n", jugador_1, puntuacion_1);
+            System.out.printf("│ [J2] %-10s: %d │\n", jugador_2, puntuacion_2);
+            System.out.println("└────────────────────┘");
+            // Mostramos el tablero en pantalla
+            render_matriz(matriz);
+
+            int resultado = (Math.random() < 0.5) ? 1 : 2;
+            if(resultado == 1){
+                // Inicia jugador 1
+                System.out.print("[J1] " + jugador_1 + " su turno: ");
+                jugada = sc.next();
+
+                // Validamos que la entrada sea valida
+                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                while(!entrada_valida){
+                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                    jugada = sc.next();
+                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                }
+
+                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                realiza_jugada(matriz, jugada, filas, columnas);
+            
+            }else {
+                // Inicia jugador 2
+                System.out.print("[J2] " + jugador_2 + " su turno: ");
+                jugada = sc.next();
+
+                // Validamos que la entrada sea valida
+                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                while(!entrada_valida){
+                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                    jugada = sc.next();
+                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                }
+
+                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                realiza_jugada(matriz, jugada, filas, columnas);
+            }
+
             while(!loop_game){
                 // Limpiamos la terminal
                 limpiar_terminal();
-
                 // Mostramos el mensaje para notificar en caso de querer parar la partida
                 System.out.println("┌───────────────────────────────────────────────────────────────┐");
                 System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
                 System.out.println("└───────────────────────────────────────────────────────────────┘");
                 System.out.println("┌────────────────────┐");
-                System.out.println("│ Jugador 1: " + puntuacion_1 + "       │");
-                System.out.println("│ Jugador 2: " + puntuacion_2 + "       │");
+                System.out.printf("│ [J1] %-10s: %d │\n", jugador_1, puntuacion_1);
+                System.out.printf("│ [J2] %-10s: %d │\n", jugador_2, puntuacion_2);
                 System.out.println("└────────────────────┘");
-
-                System.out.println("");
-
                 // Mostramos el tablero en pantalla
                 render_matriz(matriz);
 
                 System.out.println("");
-                System.out.println("");
 
-                probabilidad = Math.random() * 10;
+                // Turno jugador 1
+                System.out.print("[J1] " + jugador_1 + " su turno: ");
+                jugada = sc.next();
+                // Validamos que la entrada sea valida
                 entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                if((int) probabilidad <= 5 && (int) probabilidad >= 0){
-                    // Turno jugador 1
-                    System.out.print("[J1] " + jugador_1 + " su turno: ");
+                while(!entrada_valida){
+                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
                     jugada = sc.next();
-
-                    // Validamos que la entrada sea valida
                     entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                    while(!entrada_valida){
-                        System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
-                        jugada = sc.next();
-                        entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                    }
-
-                    // Ahora ejecutamos la jugada y mostramos el tablero actualizado
-                    comprueba_cuadritos(matriz, jugada, filas, columnas);
-                    realiza_jugada(matriz, jugada, filas, columnas);
-                    
-                    // Limpiamos la terminal
-                    limpiar_terminal();
-                    
-                    // Mostramos el mensaje para notificar en caso de querer parar la partida
-                    System.out.println("┌───────────────────────────────────────────────────────────────┐");
-                    System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
-                    System.out.println("└───────────────────────────────────────────────────────────────┘");
-
-                    System.out.println("");
-
-                    // Mostramos el tablero en pantalla
-                    render_matriz(matriz);
-
-                    System.out.println("");
-                    System.out.println("");
-                
-                }else{
-                     // Turno jugador 2
-                    System.out.print("[J2] " + jugador_2 + " su turno: ");
-                    jugada = sc.next();
-
-                    // Validamos que la entrada sea valida
-                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                    while(!entrada_valida){
-                        System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
-                        jugada = sc.next();
-                        entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                    }
-
-                    // Ahora ejecutamos la jugada y mostramos el tablero actualizado
-                    comprueba_cuadritos(matriz, jugada, filas, columnas);
-                    realiza_jugada(matriz, jugada, filas, columnas);
                 }
+
+                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                comprueba_cuadritos(matriz, jugada, filas, columnas);
+                realiza_jugada(matriz, jugada, filas, columnas);
                 
+                // Limpiamos la terminal
+                limpiar_terminal();
+                // Mostramos el mensaje para notificar en caso de querer parar la partida
+                System.out.println("┌───────────────────────────────────────────────────────────────┐");
+                System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
+                System.out.println("└───────────────────────────────────────────────────────────────┘");
+                System.out.println("┌────────────────────┐");
+                System.out.printf("│ [J1] %-10s: %d │\n", jugador_1, puntuacion_1);
+                System.out.printf("│ [J2] %-10s: %d │\n", jugador_2, puntuacion_2);
+                System.out.println("└────────────────────┘");
+                // Mostramos el tablero en pantalla
+                render_matriz(matriz);
 
+                System.out.println("");
+            
+                // Turno jugador 2
+                System.out.print("[J2] " + jugador_2 + " su turno: ");
+                jugada = sc.next();
 
-               
+                // Validamos que la entrada sea valida
+                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                while(!entrada_valida){
+                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                    jugada = sc.next();
+                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                }
+
+                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                comprueba_cuadritos(matriz, jugada, filas, columnas);
+                realiza_jugada(matriz, jugada, filas, columnas);
 
             }
 
@@ -460,7 +494,7 @@ public class practica {
 
 
         // Para el resto de casos (fila [2,8] y columna [2,8])
-      
+        
 
         
         // Jugador 1 --> '#'
