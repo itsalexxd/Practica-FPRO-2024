@@ -3,7 +3,6 @@
 
 /* 
 Cosas por hacer:
-    - Random inicio jugadores
     - Comprobar cuadrado hecho
     - Si Jugador completa cuadrado, vuelve a jugar
     
@@ -379,10 +378,48 @@ public class practica {
     // Entrada: char[][] matriz, String jugada, int filas, int columnas
     // Salida: no hay como tal
     public static void comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas){
-        // Cambio de String a char la variable de jugada
-        char input = jugada.charAt(0);
-    
-        // En la posicion de la jugada, comprobamos las posiciones adyacentes en busca de cuadrados cerrados (siempre 2)
+        int pos_fila = 0;
+        int pos_columna = 0;
+
+        // Variables para establecer si se ha completado un cuadrito o no
+        boolean arriba = false;
+        boolean abajo = false;
+        boolean derecha = false;
+        boolean izquierda = false;
+        // Recupero la posicion exacta de la jugada
+        for(int fil = 0; fil < 2*filas+1; fil++){
+            for(int col = 0; col < 2*columnas+1; col++){
+                if(matriz[fil][col] == jugada.charAt(0)){
+                    pos_fila = fil;
+                    pos_columna = col;
+                }
+            }
+        }
+        
+        // Comprobamos las posiciones inmediatamente contiguas a la posicion actual
+        // Compruebo si la posicion es una VERTICAL u HORIZONTAL
+        if(pos_fila : [0,2,4,6,8,10] && pos_columna : [1,3,5,7,9]){  // HORIZONTAL
+            // Hacer comprobaciones arriba y abajo
+            // Arriba
+            if(matriz[pos_fila][pos_columna - 2] == '─' && matriz[pos_fila - 2][pos_columna] == '│' && matriz[pos_fila + 2][pos_columna] == '│'){
+                arriba = true;
+            
+            // Abajo
+            }else if(matriz[pos_fila][pos_columna + 2] == '─' && matriz[pos_fila - 2][pos_columna] == '│' && matriz[pos_fila + 2][pos_columna] == '│'){
+                abajo = true;
+            }
+        // Comprobamos si hay cuadro completado a la derecha y a la izquierdas
+        }else if(pos_fila : [1,3,5,7,9] && pos_columna : [0,2,4,6,8,10]){ // VERTICAL
+            // Izquierda
+            if(matriz[pos_fila][pos_columna - 2] == '│' && matriz[pos_fila - 1][pos_columna - 1] == '─' && matriz[pos_fila + 1][pos_columna - 1] == '─'){
+                izquierda = true;
+            
+            // Derecha
+            }else if(matriz[pos_fila][pos_columna + 2] == '│' && matriz[pos_fila - 1][pos_columna + 1] == '─' && matriz[pos_fila + 1][pos_columna + 1] == '─'){
+                derecha = true;
+            }
+        }
+
 
         
     }
