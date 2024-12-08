@@ -22,7 +22,17 @@ public class practica {
     public static void main(String[] args){
         // Creo el objeto scanner
         Scanner sc = new Scanner(System.in);
-        
+
+        // ################################################################ //
+        // DEFINICION DE LAS VARIABLES QUE VOY A USAR A LO LARGO DEL CODIGO //
+        // ################################################################ //
+        int opcion_menu;    // Variable para la seleccion del menu principal
+        boolean loop_menu = false;      // Variable para que en el menu se responda correctamente
+        boolean dimensiones_validas = false; // Variable para que las dimensiones del tablero sean validas
+        String jugador_1;   // Varialbe para establecer el nombre al jugador 1 (opcional)
+        String jugador_2;   // Variable para establecer el nombre al jugador 2 (opcional)
+        boolean loop_game = false;  // Variable para el bucle de la partida
+
         // Limpio el terminal para mayor claridad visual
         limpiar_terminal();
 
@@ -30,12 +40,11 @@ public class practica {
         imprime_menu();
         
         System.out.print("Elije una opcion... ");
-        int opcion_menu = sc.nextInt();
+        opcion_menu = sc.nextInt();
 
         // Pedimos la opcion y realizamos comprobaciones para que sea una opcion correcta
-        boolean loop_menu = false;      // No se puede salir del bucle hasta que la entrada sea valida
+        // No se puede salir del bucle hasta que la entrada sea valida
         while(!loop_menu){
-
             // Creamos un switch para el menu
             switch (opcion_menu) {
                 case 0:
@@ -99,7 +108,7 @@ public class practica {
             int columnas = sc.nextInt();
 
             
-            boolean dimensiones_validas = false;
+            
             while(!dimensiones_validas){
                 // Si las filas no son validas, muestro el error por pantalla y las vuelvo a pedir
                 if (filas < 1 || filas > 5){
@@ -136,12 +145,12 @@ public class practica {
 
             // Pregunto el nombre de los jugadores
             System.out.print("Inserte el nombre del Jugador 1: ");
-            String jugador_1 = sc.next();
+            jugador_1 = sc.next();
 
             System.out.println("");
 
             System.out.print("Inserte el nombre del Jugador 2: ");
-            String jugador_2 = sc.next();
+            jugador_2 = sc.next();
             
             System.out.println("");
 
@@ -150,13 +159,12 @@ public class practica {
             // 2. Generamos y asignamos la estructura del tablero
             matriz = genera_tablero(matriz, filas, columnas);
 
-            String jugada = " ";
+            
 
             //-------------//
             // BUCLE JUEGO //
             //-------------//
             // Creamos el bucle del juego
-            boolean loop_game = false;
             while(!loop_game){
                 // Limpiamos la terminal
                 limpiar_terminal();
@@ -394,11 +402,15 @@ public class practica {
 
     // Funcion que comprueba si se ha cerrado un cuadrado
     // Entrada: char[][] matriz, String jugada, int filas, int columnas
-    // Salida: no hay como tal
-    public static void comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas){      
+    // Salida: char[][] matriz (con el cuadro resuelto en caso de que haya exito con la jugada)
+    public static char[][] comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas){    
+        System.out.println("Comprueba los cuadritos");  
+        System.out.println("Jugada: " + jugada.charAt(0));
+
         // Variables para la fila y columna de la posicion de la jugada
         int pos_fila = 0;
         int pos_columna = 0;
+        char pos = jugada.charAt(0);
 
         // Variables para establecer si se ha completado un cuadrito o no
         boolean arriba = false;
@@ -407,11 +419,15 @@ public class practica {
         boolean izquierda = false;
 
         // Recupero la posicion exacta de la jugada
-        for(int fil = 0; fil < 2*filas+1; fil++){
-            for(int col = 0; col < 2*columnas+1; col++){
-                if(matriz[fil][col] == jugada.charAt(0)){
+        for(int fil = 0; fil < matriz.length; fil++){
+            for(int col = 0; col < matriz[0].length; col++){
+                if(matriz[fil][col] == pos){
+                    System.out.println("Pos: " + matriz[fil][col]);
+                    System.out.println("Fil: " + fil);
+                    System.out.println("Col: " + col);
                     pos_fila = fil;
                     pos_columna = col;
+                    System.out.println("Tengo la posicion guardada");
                 }
             }
         }
@@ -420,32 +436,55 @@ public class practica {
         // Compruebo si la posicion es una VERTICAL u HORIZONTAL
         // HORIZONTAL
         if(pos_fila % 2 == 0 && pos_columna % 2 != 0){
+            System.out.println("Se que es horizontal");
             // Hacer comprobaciones arriba y abajo
             // Arriba
             if(matriz[pos_fila][pos_columna - 2] == '─' && matriz[pos_fila - 2][pos_columna] == '│' && matriz[pos_fila + 2][pos_columna] == '│'){
+                System.out.println("Se que es arriba");
                 arriba = true;
                 System.out.println(arriba);
             
             // Abajo
             }else if(matriz[pos_fila][pos_columna + 2] == '─' && matriz[pos_fila - 2][pos_columna] == '│' && matriz[pos_fila + 2][pos_columna] == '│'){
+                System.out.println("Se que es abajo");
                 abajo = true;
                 System.out.println(abajo);
             }
 
         // VERTICAL
         }else if(pos_fila % 2 != 0 && pos_columna % 2 == 0){
+            System.out.println("Se que es vertical");
             // Hacer comprobaciones Izquierda y Derecha
             // Izquierda
             if(matriz[pos_fila][pos_columna - 2] == '│' && matriz[pos_fila - 1][pos_columna - 1] == '─' && matriz[pos_fila + 1][pos_columna - 1] == '─'){
+                System.out.println("Se que es izquierda");
                 izquierda = true;
                 System.out.println(izquierda);
             
             // Derecha
             }else if(matriz[pos_fila][pos_columna + 2] == '│' && matriz[pos_fila - 1][pos_columna + 1] == '─' && matriz[pos_fila + 1][pos_columna + 1] == '─'){
+                System.out.println("Se que es derecha");
                 derecha = true;
                 System.out.println(derecha);
             }
-        }   
+        }
+        // Jugador 1 --> '#'
+        // Jugador 2 --> '×'
+        System.out.println("Se que tengo que hacer");
+        if(arriba == true){
+            matriz[pos_fila - 1][pos_columna] = '×';
+
+        }else if(abajo == true){
+            matriz[pos_fila + 1][pos_columna] = '×';
+
+        }else if(derecha == true){
+            matriz[pos_fila][pos_columna + 1] = '×';
+
+        }else if(izquierda == true){
+            matriz[pos_fila][pos_columna - 1] = '×';
+            
+        }
+        return matriz;
     }
 
 
