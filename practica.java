@@ -158,6 +158,9 @@ public class practica {
             // Creamos el bucle del juego
             boolean loop_game = false;
             while(!loop_game){
+                // Limpiamos la terminal
+                limpiar_terminal();
+
                 // Mostramos el mensaje para notificar en caso de querer parar la partida
                 System.out.println("┌───────────────────────────────────────────────────────────────┐");
                 System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
@@ -188,7 +191,22 @@ public class practica {
 
                     // Ahora ejecutamos la jugada y mostramos el tablero actualizado
                     realiza_jugada(matriz, jugada, filas, columnas);
+                    comprueba_cuadritos(matriz, jugada, filas, columnas);
+                    // Limpiamos la terminal
+                    limpiar_terminal();
+                    
+                    // Mostramos el mensaje para notificar en caso de querer parar la partida
+                    System.out.println("┌───────────────────────────────────────────────────────────────┐");
+                    System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
+                    System.out.println("└───────────────────────────────────────────────────────────────┘");
+
+                    System.out.println("");
+
+                    // Mostramos el tablero en pantalla
                     render_matriz(matriz);
+
+                    System.out.println("");
+                    System.out.println("");
                 
                 }else{
                      // Turno jugador 2
@@ -205,7 +223,7 @@ public class practica {
 
                     // Ahora ejecutamos la jugada y mostramos el tablero actualizado
                     realiza_jugada(matriz, jugada, filas, columnas);
-                    render_matriz(matriz);
+                    comprueba_cuadritos(matriz, jugada, filas, columnas);
                 }
                 
 
@@ -377,7 +395,8 @@ public class practica {
     // Funcion que comprueba si se ha cerrado un cuadrado
     // Entrada: char[][] matriz, String jugada, int filas, int columnas
     // Salida: no hay como tal
-    public static void comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas){
+    public static void comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas){      
+        // Variables para la fila y columna de la posicion de la jugada
         int pos_fila = 0;
         int pos_columna = 0;
 
@@ -386,6 +405,7 @@ public class practica {
         boolean abajo = false;
         boolean derecha = false;
         boolean izquierda = false;
+
         // Recupero la posicion exacta de la jugada
         for(int fil = 0; fil < 2*filas+1; fil++){
             for(int col = 0; col < 2*columnas+1; col++){
@@ -398,30 +418,34 @@ public class practica {
         
         // Comprobamos las posiciones inmediatamente contiguas a la posicion actual
         // Compruebo si la posicion es una VERTICAL u HORIZONTAL
-        if(pos_fila : [0,2,4,6,8,10] && pos_columna : [1,3,5,7,9]){  // HORIZONTAL
+        // HORIZONTAL
+        if(pos_fila % 2 == 0 && pos_columna % 2 != 0){
             // Hacer comprobaciones arriba y abajo
             // Arriba
             if(matriz[pos_fila][pos_columna - 2] == '─' && matriz[pos_fila - 2][pos_columna] == '│' && matriz[pos_fila + 2][pos_columna] == '│'){
                 arriba = true;
+                System.out.println(arriba);
             
             // Abajo
             }else if(matriz[pos_fila][pos_columna + 2] == '─' && matriz[pos_fila - 2][pos_columna] == '│' && matriz[pos_fila + 2][pos_columna] == '│'){
                 abajo = true;
+                System.out.println(abajo);
             }
-        // Comprobamos si hay cuadro completado a la derecha y a la izquierdas
-        }else if(pos_fila : [1,3,5,7,9] && pos_columna : [0,2,4,6,8,10]){ // VERTICAL
+
+        // VERTICAL
+        }else if(pos_fila % 2 != 0 && pos_columna % 2 == 0){
+            // Hacer comprobaciones Izquierda y Derecha
             // Izquierda
             if(matriz[pos_fila][pos_columna - 2] == '│' && matriz[pos_fila - 1][pos_columna - 1] == '─' && matriz[pos_fila + 1][pos_columna - 1] == '─'){
                 izquierda = true;
+                System.out.println(izquierda);
             
             // Derecha
             }else if(matriz[pos_fila][pos_columna + 2] == '│' && matriz[pos_fila - 1][pos_columna + 1] == '─' && matriz[pos_fila + 1][pos_columna + 1] == '─'){
                 derecha = true;
+                System.out.println(derecha);
             }
-        }
-
-
-        
+        }   
     }
 
 
