@@ -1,21 +1,23 @@
-// https://campusvirtual.uva.es/pluginfile.php/6320700/mod_resource/content/2/%5BFPRO%5D%20Enunciado%20Pr%C3%A1ctica%20v1.3.pdf
-
-
 /* 
 Cosas por hacer:
-    - Comprobar cuadrado hecho
+    - Comprobar cuadrado hecho (extremos hecho, falta en centro)
     - Si Jugador completa cuadrado, vuelve a jugar
     
     - Caso 2
-    - Caso 3
-
-    - Optimizaciones
-    - Organizar variables
+        - El programa cargará la última partida guardada, y pudiendo continuarla en el mismo punto donde se dejó cuando se guardó misma situación del tablero y mismo turno de jugador. 
+        - La partida se cargará de un fichero amado “partidaGuardada.txt” situado en el mismo directorio “ficheros” que en la opción anterior.
 */ 
-package Practica;
 
+// Importo las librerias necesarias
 import java.util.Scanner;
-import java.util.Random;
+// Importo las librerias necesarias relacionadas con el tema de leer y escribir ficheros en java
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+// Libreria para la fecha de las partidas
+import java.time.LocalDate;
 
 
 public class practica {
@@ -29,15 +31,17 @@ public class practica {
         int opcion_menu;    // Variable para la seleccion del menu principal
         boolean loop_menu = false;      // Variable para que en el menu se responda correctamente
         boolean dimensiones_validas = false; // Variable para que las dimensiones del tablero sean validas
-        String jugador_1;   // Variable para establecer el nombre al jugador 1 (opcional)
-        String jugador_2;   // Variable para establecer el nombre al jugador 2 (opcional)
+        String jugador_1 = " ";   // Variable para establecer el nombre al jugador 1 (opcional)
+        String jugador_2 = " ";   // Variable para establecer el nombre al jugador 2 (opcional)
         boolean loop_game = false;  // Variable para el bucle de la partida
-        double probabilidad = 0;    // Dado para ver quien empieza jugando entre J1 y J2
-        boolean entrada_valida;     // Entrada del jugador que sea valida
+        double resultado = 0;    // Dado para ver quien empieza jugando entre J1 y J2
+        boolean entrada_valida = false;     // Entrada del jugador que sea valida
         String jugada = " ";
         int puntuacion_1 = 0;
         int puntuacion_2 = 0;
-        boolean primer_turno = false;
+        boolean selector = true;
+        int filas = 0;
+        int columnas = 0;
         
 
         // Limpio el terminal para mayor claridad visual
@@ -53,7 +57,7 @@ public class practica {
         // No se puede salir del bucle hasta que la entrada sea valida
         while(!loop_menu){
             // Creamos un switch para el menu
-            switch (opcion_menu) {
+            switch(opcion_menu) {
                 case 0:
                 // Si la opcion es 0, volvemos a mostrar el menu
                     limpiar_terminal();
@@ -75,7 +79,8 @@ public class practica {
                 // Ver Resultados
                 case 3:
                     loop_menu = true;
-                    System.out.println("Caso 3");
+                    limpiar_terminal();
+                    muestra_resultados();
                     break;
 
                 // Salir del programa
@@ -106,13 +111,17 @@ public class practica {
             limpiar_terminal();
 
             // Pedimos las dimensiones del tablero
-            System.out.println("Inserte las dimensiones del tablero");
-            System.out.println("Nota: Las dimensiones deben ser como maximo 5x5");
+            System.out.println("┌─────────────────────────────────────────────────┐");
+            System.out.println("│ DIMENSIONES DEL TABLERO                         │");
+            System.out.println("├─────────────────────────────────────────────────┤");
+            System.out.println("│ Inserte las dimensiones del tablero             │");
+            System.out.println("│ Nota: Las dimensiones deben ser como maximo 5x5 │");
+            System.out.println("└─────────────────────────────────────────────────┘");
             System.out.print("");
             System.out.print("Numero de filas: ");
-            int filas = sc.nextInt();
+            filas = sc.nextInt();
             System.out.print("Numero de columnas: ");
-            int columnas = sc.nextInt();
+            columnas = sc.nextInt();
 
             
             
@@ -120,7 +129,7 @@ public class practica {
                 // Si las filas no son validas, muestro el error por pantalla y las vuelvo a pedir
                 if (filas < 1 || filas > 5){
                     System.out.print("");
-                    System.out.println("Dimensiones no validas...");
+                    System.out.println("Dimensiones de las filas no validas...");
                     System.out.print("");
                     System.out.println("El numero de filas debe ser entre 1 y 5");
                     System.out.print("Inserte las filas deseadas de nuevo: ");
@@ -131,7 +140,7 @@ public class practica {
                 // Si las columnas no son validas, muestro el error por pantalla y las vuelvo
                 else if (columnas < 1 || columnas > 5){
                     System.out.print("");
-                    System.out.println("Dimensiones no validas...");
+                    System.out.println("Dimensiones de las columnas no validas...");
                     System.out.print("");
                     System.out.println("El numero de columnas debe ser entre 1 y 5");
                     System.out.print("Inserte las columnas deseadas de nuevo: ");
@@ -148,149 +157,73 @@ public class practica {
                 }
             }
 
-            System.out.println("");
+            limpiar_terminal();
+
+            System.out.println("┌─────────────────────────────────────────────────┐");
+            System.out.println("│ NOMBRE DE LOS JUGADORES                         │");
+            System.out.println("└─────────────────────────────────────────────────┘");
 
             // Pregunto el nombre de los jugadores
-            System.out.print("Inserte el nombre del Jugador 1: ");
+            System.out.print("Inserte el nombre para el Jugador 1: ");
             jugador_1 = sc.next();
-
-            System.out.println("");
-
-            System.out.print("Inserte el nombre del Jugador 2: ");
+            System.out.print("Inserte el nombre para el Jugador 2: ");
             jugador_2 = sc.next();
-            
-            System.out.println("");
 
             // 1. Generamos la matriz del tablero
             char[][] matriz = new char[2*filas + 1][2 * columnas + 1];
             // 2. Generamos y asignamos la estructura del tablero
             matriz = genera_tablero(matriz, filas, columnas);
 
-            
+            limpiar_terminal();
 
             //-------------//
             // BUCLE JUEGO //
             //-------------//
             // INICIO PRIMER TURNO
+            
+            // Mostramos por pantalla la informacion de la partida
+            info_partida(matriz, jugador_1, jugador_2, puntuacion_1, puntuacion_2);
 
-            // Limpiamos la terminal
-            limpiar_terminal();
-            // Mostramos el mensaje para notificar en caso de querer parar la partida
-            System.out.println("┌───────────────────────────────────────────────────────────────┐");
-            System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
-            System.out.println("└───────────────────────────────────────────────────────────────┘");
-            // Mostramos la puntuacion que llevan ambos jugadores
-            System.out.println("┌────────────────────┐");
-            System.out.printf("│ [J1] %-10s: %d │\n", jugador_1, puntuacion_1);
-            System.out.printf("│ [J2] %-10s: %d │\n", jugador_2, puntuacion_2);
-            System.out.println("└────────────────────┘");
-            // Mostramos el tablero en pantalla
-            render_matriz(matriz);
-
-            int resultado = (Math.random() < 0.5) ? 1 : 2;
+            // Primer turno
+            resultado = (Math.random() < 0.5) ? 1 : 2;
             if(resultado == 1){
-                // Inicia jugador 1
-                System.out.print("[J1] " + jugador_1 + " su turno: ");
-                jugada = sc.next();
-
-                // Validamos que la entrada sea valida
-                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                while(!entrada_valida){
-                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
-                    jugada = sc.next();
-                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                }
-
+                selector = true;
+                turno_jugador(selector, jugada, entrada_valida, matriz, filas, columnas, jugador_1, jugador_2, puntuacion_1, puntuacion_2, sc);
                 // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                // No hace falta comprobar si se completan cuadritos por ser la primera jugada
                 realiza_jugada(matriz, jugada, filas, columnas);
             
             }else {
-                // Inicia jugador 2
-                System.out.print("[J2] " + jugador_2 + " su turno: ");
-                jugada = sc.next();
-
-                // Validamos que la entrada sea valida
-                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                while(!entrada_valida){
-                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
-                    jugada = sc.next();
-                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                }
-
+                selector = false;
+                turno_jugador(selector, jugada, entrada_valida, matriz, filas, columnas, jugador_1, jugador_2, puntuacion_1, puntuacion_2, sc);
                 // Ahora ejecutamos la jugada y mostramos el tablero actualizado
+                // No hace falta comprobar si se completan cuadritos por ser la primera jugada
                 realiza_jugada(matriz, jugada, filas, columnas);
             }
 
+            // Resto de la partida
             while(!loop_game){
-                // Limpiamos la terminal
-                limpiar_terminal();
-                // Mostramos el mensaje para notificar en caso de querer parar la partida
-                System.out.println("┌───────────────────────────────────────────────────────────────┐");
-                System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
-                System.out.println("└───────────────────────────────────────────────────────────────┘");
-                System.out.println("┌────────────────────┐");
-                System.out.printf("│ [J1] %-10s: %d │\n", jugador_1, puntuacion_1);
-                System.out.printf("│ [J2] %-10s: %d │\n", jugador_2, puntuacion_2);
-                System.out.println("└────────────────────┘");
-                // Mostramos el tablero en pantalla
-                render_matriz(matriz);
+                info_partida(matriz, jugador_1, jugador_2, puntuacion_1, puntuacion_2);
 
                 System.out.println("");
 
-                // Turno jugador 1
-                System.out.print("[J1] " + jugador_1 + " su turno: ");
-                jugada = sc.next();
-                // Validamos que la entrada sea valida
-                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                while(!entrada_valida){
-                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
-                    jugada = sc.next();
-                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                // Cambiamos el valor de selector para que cambie de jugador
+                if(!selector){
+                    selector = true;
+                }else {
+                    selector = false;
                 }
 
-                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
-                comprueba_cuadritos(matriz, jugada, filas, columnas);
-                realiza_jugada(matriz, jugada, filas, columnas);
+                turno_jugador(selector, jugada, entrada_valida, matriz, filas, columnas, jugador_1, jugador_2, puntuacion_1, puntuacion_2, sc);
                 
-                // Limpiamos la terminal
-                limpiar_terminal();
-                // Mostramos el mensaje para notificar en caso de querer parar la partida
-                System.out.println("┌───────────────────────────────────────────────────────────────┐");
-                System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
-                System.out.println("└───────────────────────────────────────────────────────────────┘");
-                System.out.println("┌────────────────────┐");
-                System.out.printf("│ [J1] %-10s: %d │\n", jugador_1, puntuacion_1);
-                System.out.printf("│ [J2] %-10s: %d │\n", jugador_2, puntuacion_2);
-                System.out.println("└────────────────────┘");
-                // Mostramos el tablero en pantalla
-                render_matriz(matriz);
-
-                System.out.println("");
-            
-                // Turno jugador 2
-                System.out.print("[J2] " + jugador_2 + " su turno: ");
-                jugada = sc.next();
-
-                // Validamos que la entrada sea valida
-                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
-                while(!entrada_valida){
-                    System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
-                    jugada = sc.next();
-                    entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+                // Compruebo si quedan jugadas disponibles
+                if(jugadas_disponibles(matriz) == false){
+                    loop_game = true;
                 }
-
-                // Ahora ejecutamos la jugada y mostramos el tablero actualizado
-                comprueba_cuadritos(matriz, jugada, filas, columnas);
-                realiza_jugada(matriz, jugada, filas, columnas);
-
             }
 
-
-
-        }else if(opcion_menu == 2){
-
-        }else if(opcion_menu == 3){
-
+            // Guardo los datos de la partida
+            escribe_resultado(filas, columnas, puntuacion_1, puntuacion_2, jugador_1, jugador_2);
         }
 
 
@@ -354,7 +287,7 @@ public class practica {
                 // Asigno a cada posicion de la matriz, el valor correspondiente
                 // En las filas y columnas pares asignamos el "■"
                 if(fil % 2 == 0 && col % 2 == 0){
-                    matriz[fil][col] = '•';
+                    matriz[fil][col] = '■'; //•
                 
                 // En las que no son pares, el valor para cada jugada [A,Z], [a, z], [0, 9] 
                 }else if(fil % 2 != 0 && col % 2 != 0){
@@ -398,6 +331,10 @@ public class practica {
         // Convierto la jugada de string a char para poder compararla con las posibilidades de la matriz
         char input = jugada.charAt(0);
 
+        if(jugada == "**"){
+
+        }
+
         // Compruebo que la longitud de la cadena sea valida (minimo 1 y maximo 2 para el caso de salir y guardar)
         if(jugada.length() < 1 || jugada.length() > 2){
             return false;
@@ -418,6 +355,10 @@ public class practica {
         // En caso de que no sea valido, devolvemos false
         return false;
     } // Fin valida_entrada
+
+    public static void guarda_sal(){
+        
+    }
 
 
     // Funcion que realiza las jugadas en la matriz
@@ -444,15 +385,31 @@ public class practica {
         return matriz;
     } // Fin realiza_jugada
 
+    // Funcion que comprueba si quedan jugadas disponibles en el tablero
+    // Entrada:
+    // Salida:
+    public static boolean jugadas_disponibles(char[][] matriz) {
+        for (int fil = 0; fil < matriz.length; fil++) {
+            for (int col = 0; col < matriz[fil].length; col++) {
+                // Comprobamos si la celda contiene un carácter que representa una jugada
+                if ((matriz[fil][col] >= 'A' && matriz[fil][col] <= 'Z') || (matriz[fil][col] >= 'a' && matriz[fil][col] <= 'z') || (matriz[fil][col] >= '0' && matriz[fil][col] <= '9')) {
+                    return true; // Hay al menos una jugada disponible
+                }
+            }
+        }
+        return false; // No hay jugadas disponibles
+    }
 
     // Funcion que comprueba si se ha cerrado un cuadrado
     // Entrada: char[][] matriz, String jugada, int filas, int columnas
     // Salida: char[][] matriz (con el cuadro resuelto en caso de que haya exito con la jugada)
-    public static void comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas){    
+    public static void comprueba_cuadritos(char[][] matriz, String jugada, int filas, int columnas, boolean selector, int puntuacion_1, int puntuacion_2, Scanner sc){    
         // Variables para la fila y columna de la posicion de la jugada
         int pos_fila = 0;
         int pos_columna = 0;
         char pos = jugada.charAt(0);
+        char equis = ' ';
+        boolean punto = false;
 
         // Recupero la posicion exacta de la jugada
         for(int fil = 0; fil < matriz.length; fil++){
@@ -463,18 +420,28 @@ public class practica {
                 }
             }
         }
+
+        // Jugador 1 --> '#'
+        // Jugador 2 --> '×'
+        if(selector == true){
+            equis = '×';
+        }else {
+            equis = '#';
+        }
         
         // Compruebo por separado las esquinas
         // Comprueo para el borde para fila = 0
         if(pos_fila == 0){
             if(matriz[pos_fila + 2][pos_columna] == '─' && matriz[pos_fila + 1][pos_columna - 1] == '│' && matriz[pos_fila + 1][pos_columna + 1] == '│'){
-                matriz[pos_fila + 1][pos_columna] = '×';
+                matriz[pos_fila + 1][pos_columna] = equis;
+                punto = true;
             }
         }
         // Compruebo el borde para la fila = 10
         if(pos_fila == 10){
             if(matriz[pos_fila - 2][pos_columna] == '─' && matriz[pos_fila - 1][pos_columna - 1] == '│' && matriz[pos_fila - 1][pos_columna + 1] == '│'){
-                matriz[pos_fila - 1][pos_columna] = '×';
+                matriz[pos_fila - 1][pos_columna] = equis;
+                punto = true;
             }
         }
 
@@ -482,23 +449,124 @@ public class practica {
         // Compruebo para la columna = 0
         if(pos_columna == 0){
             if(matriz[pos_fila - 1][pos_columna + 1] == '─' && matriz[pos_fila + 1][pos_columna + 1] == '─' && matriz[pos_fila][pos_columna + 2] == '│'){
-                matriz[pos_fila][pos_columna + 1] = '×';
+                matriz[pos_fila][pos_columna + 1] = equis;
+                punto = true;
             }
         }
         // Compruebo para la columna = 10
         if(pos_columna == 10){
             if(matriz[pos_fila - 1][pos_columna - 1] == '─' && matriz[pos_fila + 1][pos_columna - 1] == '─' && matriz[pos_fila][pos_columna - 2] == '│'){
-                matriz[pos_fila][pos_columna - 1] = '×';
+                matriz[pos_fila][pos_columna - 1] = equis;
+                punto = true;
             }
         }
 
-
         // Para el resto de casos (fila [2,8] y columna [2,8])
         
-
         
-        // Jugador 1 --> '#'
-        // Jugador 2 --> '×'
+        if(selector == true && punto == true){
+            puntuacion_1++;
+       
+        }else if(selector == false && punto == true) {
+            puntuacion_2++;
+            
+        }
+    }
+
+
+    public static void info_partida(char[][] matriz, String jugador_1, String jugador_2, int puntuacion_1, int puntuacion_2){
+        // Limpiamos la terminal
+        limpiar_terminal();
+        // Mostramos el mensaje para notificar en caso de querer parar la partida
+        System.out.println("┌───────────────────────────────────────────────────────────────┐");
+        System.out.println("│ Introduzca [**] en caso de querer guardar la partida y salir. │");
+        System.out.println("└───────────────────────────────────────────────────────────────┘");
+
+        System.out.println("┌──────────────────────────┐");
+        System.out.println("│ PUNTUACION DE LA PARTIDA │");
+        System.out.println("├──────────────────────────┤");
+        System.out.printf("│ [J1] %-10s:     %d   │\n", jugador_1, puntuacion_1);
+        System.out.printf("│ [J2] %-10s:     %d   │\n", jugador_2, puntuacion_2);
+        System.out.println("└──────────────────────────┘");
+        // Mostramos el tablero en pantalla
+        render_matriz(matriz);
+    }
+
+    public static void turno_jugador(boolean selector, String jugada, boolean entrada_valida, char[][] matriz, int filas, int columnas, String jugador_1, String jugador_2, int puntuacion_1, int puntuacion_2, Scanner sc){
+        // Variable para declarar el turno de cada jugador
+            // true --> Jugador 1
+            // false --> Jugador 2
+         
+        if(selector == true){
+            // Turno jugador 1
+            System.out.print("[J1] " + jugador_1 + " su turno: ");
+            jugada = sc.next();
+
+            entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+            while(!entrada_valida){
+                System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                jugada = sc.next();
+                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+            }
+            comprueba_cuadritos(matriz, jugada, filas, columnas, selector, puntuacion_1, puntuacion_2, sc);
+            realiza_jugada(matriz, jugada, filas, columnas);
+
+        }else {
+            // Turno jugador 2
+            System.out.print("[J2] " + jugador_2 + " su turno: ");
+            jugada = sc.next();
+
+            entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+            while(!entrada_valida){
+                System.out.println("Jugada no valida, inserte la jugada de nuevo: ");
+                jugada = sc.next();
+                entrada_valida = valida_entrada(jugada, matriz, filas, columnas);
+            }
+
+            comprueba_cuadritos(matriz, jugada, filas, columnas, selector, puntuacion_1, puntuacion_2, sc);
+            realiza_jugada(matriz, jugada, filas, columnas);
+        }
+    }// Fin turno_jugador
+
+
+
+    // Caso 3 guardar datos
+    public static void escribe_resultado(int filas, int columnas, int puntuacion_1, int puntuacion_2, String jugador_1, String jugador_2){
+        // Ruta y nombre del archivo
+        String ruta = "src\\ficheros\\resultados.txt";
+        File archivo = new File(ruta);
+
+        // Guardo las variables que me interesa almacenar
+        // Obtener la fecha actual
+        LocalDate fechaActual = LocalDate.now();
+        // Guardar la fecha en una variable
+        String fecha = fechaActual.toString();
+        String dimensiones_tablero = filas + "x" + columnas;
+
+
+
+        try (FileWriter escritor = new FileWriter(archivo, true)) {
+            // Escribimos en el archivo los datos requeridosS
+            escritor.write("Fecha: " + fecha + "; Dimensiones: " + dimensiones_tablero + "; Puntuaciones: [J1]" + jugador_1 + ": " + puntuacion_1 + "; [J2]" + jugador_2 + ": " + puntuacion_2 + "\n");
+
+        } catch (IOException e) {
+            System.out.println("Error al escribir en el archivo: " + e.getMessage());
+        }
+    }
+
+    public static void muestra_resultados(){
+        // Ruta y nombre del archivo
+        String ruta = "src\\ficheros\\resultados.txt";
+        File archivo = new File(ruta);
+
+        try (BufferedReader lector = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = lector.readLine()) != null) {
+                System.out.println(linea); // Muestra cada línea del archivo
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
     }
 
 
